@@ -31,6 +31,9 @@ class Model:
         # Default summoner for the user
         self.summoner = summoner.Summoner()
 
+        # Default participants involved in current game
+        self.participants = None
+
         # Default region the model uses (Explicitly Oceania)
         self.region = region_data.get_region_by_slug('oce')
 
@@ -94,9 +97,33 @@ class Model:
 
         # Otherwise...
         else:
+
             # Display reason in the status bar
             put_list = ["update status bar", self.summoner.response.reason, "red"]
             queue.put(put_list)
 
-    def retrieve_other_summoners(self):
-        current_game_v1_0.get_summoners(self.api_key, self.summoner.id, self.region)
+    def retrieve_other_summoners(self, queue):
+
+        # Obtain the participants and the response
+        self.participants, response = current_game_v1_0.get_participants(self.api_key, self.summoner.id, self.region)
+
+        # If response is healthy...
+        if response.status_code == 200:
+
+            # Print each participants user name
+            for participant in self.participants:
+                print(participant.name + str(participant.runes))
+
+        # If the player is currently not in game...
+        if response.status_code == 404:
+
+            # Alert the user
+            put_list = ["update status bar", "Summoner is currently not in a game", "red"]
+            queue.put(put_list)
+
+        # Otherwise...
+        else:
+
+            # Display reason in the status Bar
+            put_list = ["update status bar", response.reason, "red"]
+            queue.put(put_list)

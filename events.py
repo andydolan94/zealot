@@ -22,7 +22,7 @@ def submit_select_event(model, view, queue):
     submit_press_event_thread.start()
 
 
-def get_game_select_event(model):
+def get_game_select_event(model, queue):
     """
     This event is triggered to retrieve all the other summoners in the entered summoner's game
     :return:
@@ -30,7 +30,7 @@ def get_game_select_event(model):
 
     # The thread
     get_game_event_thread = threading.Thread(target=model.retrieve_other_summoners)
-    get_game_event_thread._args = ()
+    get_game_event_thread._args = (queue,)
     get_game_event_thread.start()
 
 

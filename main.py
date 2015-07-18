@@ -45,7 +45,7 @@ class MainController:
         elif event.widget.widgetName == "enter key":
             events.submit_select_event(self.model, self.view, self.queue)
         elif event.widget.widgetName == "get game":
-            events.get_game_select_event(self.model)
+            events.get_game_select_event(self.model, self.queue)
         else:
             events.no_event_assigned(self.queue)
 
