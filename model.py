@@ -104,6 +104,10 @@ class Model:
 
     def retrieve_other_summoners(self, queue):
 
+        # Update status bar
+        put_list = ["update status bar", "Searching for game...", "dark orange"]
+        queue.put(put_list)
+
         # Obtain the participants and the response
         self.participants, response = current_game_v1_0.get_participants(self.api_key, self.summoner.id, self.region)
 
@@ -114,8 +118,12 @@ class Model:
             for participant in self.participants:
                 print(participant.name + str(participant.runes))
 
+            # Alert the user
+            put_list = ["update status bar", "Game found!", "green"]
+            queue.put(put_list)
+
         # If the player is currently not in game...
-        if response.status_code == 404:
+        elif response.status_code == 404:
 
             # Alert the user
             put_list = ["update status bar", "Summoner is currently not in a game", "red"]
