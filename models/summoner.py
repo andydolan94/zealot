@@ -1,5 +1,6 @@
 __author__ = 'Andrew'
 
+
 class Summoner:
     """
     For creating a summoner object containing all the information about a summoner

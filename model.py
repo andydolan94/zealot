@@ -4,6 +4,7 @@ from utilities import clean
 from api_methods import summoner_v1_4
 from api_methods import current_game_v1_0
 from models import data_dragon
+from models import summoner
 from data import region_data
 
 __author__ = 'Andrew'
@@ -26,6 +27,9 @@ class Model:
 
         # Default summoner name the model uses
         self.name = ""
+
+        # Default summoner for the user
+        self.summoner = summoner.Summoner()
 
         # Default region the model uses (Explicitly Oceania)
         self.region = region_data.get_region_by_slug('oce')
@@ -64,16 +68,16 @@ class Model:
         queue.put(put_list)
 
         # Obtain a summoner
-        summoner = summoner_v1_4.get_summoner_by_name(self.api_key, self.name, self.region)
+        self.summoner = summoner_v1_4.get_summoner_by_name(self.api_key, self.name, self.region)
 
         # Update the version from the selected region
         self.versions = data_dragon.Versions(self.region)
 
         # If response is healthy...
-        if summoner.response.status_code == 200:
+        if self.summoner.response.status_code == 200:
 
             # Obtain the image
-            summoner_icon = data_dragon.SummonerIcon(self.versions.profile_icon_version, summoner.profile_icon_id)
+            summoner_icon = data_dragon.SummonerIcon(self.versions.profile_icon_version, self.summoner.profile_icon_id)
 
             # Save the image locally
             with open(summoner_icon.file, 'wb') as f:
@@ -81,18 +85,18 @@ class Model:
                     f.write(chunk)
 
             # Send the updated information to the GUI
-            put_list = ["update summoner data", str(summoner.level)]
+            put_list = ["update summoner data", str(self.summoner.level)]
             queue.put(put_list)
 
             # Update the status bar
-            put_list = ["update status bar", "Obtained summoner: " + summoner.name, "green"]
+            put_list = ["update status bar", "Obtained summoner: " + self.summoner.name, "green"]
             queue.put(put_list)
 
         # Otherwise...
         else:
             # Display reason in the status bar
-            put_list = ["update status bar", summoner.response.reason, "red"]
+            put_list = ["update status bar", self.summoner.response.reason, "red"]
             queue.put(put_list)
 
     def retrieve_other_summoners(self):
-        current_game_v1_0.get_summoners(self.api_key, self.)
+        current_game_v1_0.get_summoners(self.api_key, self.summoner.id, self.region)
