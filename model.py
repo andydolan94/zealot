@@ -71,13 +71,13 @@ class Model:
         queue.put(put_list)
 
         # Obtain a summoner
-        self.summoner = summoner_v1_4.get_summoner_by_name(self.api_key, self.name, self.region)
+        self.summoner, response = summoner_v1_4.get_summoner_by_name(self.api_key, self.name, self.region)
 
         # Update the version from the selected region
         self.versions = data_dragon.Versions(self.region)
 
         # If response is healthy...
-        if self.summoner.response.status_code == 200:
+        if response.status_code == 200:
 
             # Obtain the image
             summoner_icon = data_dragon.SummonerIcon(self.versions.profile_icon_version, self.summoner.profile_icon_id)
@@ -99,7 +99,7 @@ class Model:
         else:
 
             # Display reason in the status bar
-            put_list = ["update status bar", self.summoner.response.reason, "red"]
+            put_list = ["update status bar", response.reason, "red"]
             queue.put(put_list)
 
     def retrieve_other_summoners(self, queue):

@@ -17,7 +17,6 @@ class Summoner:
         self.profile_icon_id = None
 
         # summoner_v1.4 attributes
-        self.response = None
         self.revision_date = None
         self.level = None
 

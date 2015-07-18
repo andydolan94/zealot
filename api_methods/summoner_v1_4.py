@@ -23,7 +23,6 @@ def get_summoner_by_name(api_key, input_name, region):
 
     # The response
     response = requests.get(url)
-    new_summoner.response = response
 
     # If the response is healthy...
     if response.status_code == 200:
@@ -35,4 +34,4 @@ def get_summoner_by_name(api_key, input_name, region):
         new_summoner.revision_date = response.json()[input_name]["revisionDate"]
         new_summoner.level = response.json()[input_name]["summonerLevel"]
 
-    return new_summoner
+    return new_summoner, response
