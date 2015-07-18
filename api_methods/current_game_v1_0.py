@@ -39,9 +39,5 @@ def get_participants(api_key, summoner_id, region):
             # Append the new summoner to the participants list
             participants.append(new_summoner)
 
-    elif response.status_code == 404:
-        print("Summoner is currently not in a game")
-    print(url)
-
     # Return a tuple of the list of participants and the response
     return participants, response
