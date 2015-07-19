@@ -120,10 +120,6 @@ class Model:
         # If response is healthy...
         if response.status_code == 200:
 
-            # Print each participants user name
-            for participant in self.participants:
-                print(participant.name + str(participant.runes))
-
             # Alert the user
             put_list = ["update status bar", "Game found!", "green"]
             queue.put(put_list)
