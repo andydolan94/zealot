@@ -31,6 +31,9 @@ class Model:
         # Default summoner for the user
         self.summoner = summoner.Summoner()
 
+        # Default participants involved in current game
+        self.participants = None
+
         # Default region the model uses (Explicitly Oceania)
         self.region = region_data.get_region_by_slug('oce')
 
@@ -68,13 +71,13 @@ class Model:
         queue.put(put_list)
 
         # Obtain a summoner
-        self.summoner = summoner_v1_4.get_summoner_by_name(self.api_key, self.name, self.region)
+        self.summoner, response = summoner_v1_4.get_summoner_by_name(self.api_key, self.name, self.region)
 
         # Update the version from the selected region
         self.versions = data_dragon.Versions(self.region)
 
         # If response is healthy...
-        if self.summoner.response.status_code == 200:
+        if response.status_code == 200:
 
             # Obtain the image
             summoner_icon = data_dragon.SummonerIcon(self.versions.profile_icon_version, self.summoner.profile_icon_id)
@@ -94,9 +97,47 @@ class Model:
 
         # Otherwise...
         else:
+
             # Display reason in the status bar
-            put_list = ["update status bar", self.summoner.response.reason, "red"]
+            put_list = ["update status bar", response.reason, "red"]
             queue.put(put_list)
 
-    def retrieve_other_summoners(self):
-        current_game_v1_0.get_summoners(self.api_key, self.summoner.id, self.region)
+    def retrieve_other_summoners(self, queue):
+        """
+        This function collects all the summoners that are currently in the same game as the player and displays
+        information about those summoners
+        :param queue:
+        :return:
+        """
+
+        # Update status bar
+        put_list = ["update status bar", "Searching for game...", "dark orange"]
+        queue.put(put_list)
+
+        # Obtain the participants and the response
+        self.participants, response = current_game_v1_0.get_participants(self.api_key, self.summoner.id, self.region)
+
+        # If response is healthy...
+        if response.status_code == 200:
+
+            # Alert the user
+            put_list = ["update status bar", "Game found!", "green"]
+            queue.put(put_list)
+
+            # Open a new window and add the summoners to the window
+            put_list = ["update current game", self.participants]
+            queue.put(put_list)
+
+        # If the player is currently not in game...
+        elif response.status_code == 404:
+
+            # Alert the user
+            put_list = ["update status bar", "Summoner is currently not in a game", "red"]
+            queue.put(put_list)
+
+        # Otherwise...
+        else:
+
+            # Display reason in the status Bar
+            put_list = ["update status bar", response.reason, "red"]
+            queue.put(put_list)
