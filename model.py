@@ -103,6 +103,12 @@ class Model:
             queue.put(put_list)
 
     def retrieve_other_summoners(self, queue):
+        """
+        This function collects all the summoners that are currently in the same game as the player and displays
+        information about those summoners
+        :param queue:
+        :return:
+        """
 
         # Update status bar
         put_list = ["update status bar", "Searching for game...", "dark orange"]
