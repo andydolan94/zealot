@@ -128,6 +128,10 @@ class Model:
             put_list = ["update status bar", "Game found!", "green"]
             queue.put(put_list)
 
+            # Open a new window and add the summoners to the window
+            put_list = ["update current game", self.participants]
+            queue.put(put_list)
+
         # If the player is currently not in game...
         elif response.status_code == 404:
 

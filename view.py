@@ -1,4 +1,7 @@
+from views import current_game_view
 from tkinter import *
+
+import threading
 import queue
 
 __author__ = 'Andrew'
@@ -150,6 +153,12 @@ class View:
 
                     # Place the "Get Game" button into the grid
                     self.get_game_button.grid(row=3, column=2)
+
+                elif queue_item[0] == "update current game":
+                    # Create a new window via thread
+                    current_game_win_thread = threading.Thread(target=current_game_view.view_game)
+                    current_game_win_thread._args = ([queue_item[1]])
+                    current_game_win_thread.start()
 
             except queue.Empty:
                 pass
