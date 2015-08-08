@@ -34,7 +34,7 @@ def view_game(participants):
             name_labels[-1].grid(row=grid_counter[0], column=0)
 
             # Champion
-            champ_labels.append(Label(frame_base, text=participant.champion_id))
+            champ_labels.append(Label(frame_base, text=participant.current_champion.name))
             champ_labels[-1].grid(row=grid_counter[0], column=1)
 
             # Increment counter
@@ -48,7 +48,7 @@ def view_game(participants):
             name_labels[-1].grid(row=grid_counter[1], column=3)
 
             # Champion
-            champ_labels.append(Label(frame_base, text=participant.champion_id))
+            champ_labels.append(Label(frame_base, text=participant.current_champion.name))
             champ_labels[-1].grid(row=grid_counter[1], column=2)
 
             # Increment counter

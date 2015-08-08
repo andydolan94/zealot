@@ -20,7 +20,6 @@ def get_participants(api_key, summoner_id, region):
 
         # For each participant
         for participant in response.json()["participants"]:
-
             # Create a new summoner
             new_summoner = summoner.InGameSummoner()
 
