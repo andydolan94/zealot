@@ -61,6 +61,9 @@ class Versions:
         # Getting the profile icon version
         self.profile_icon_version = self.get_json_object_value("profileicon")
 
+        # Getting the champion version
+        self.champion_version = self.get_json_object_value("champion")
+
     def get_json_object_value(self, key):
         """
         Takes a key which decides what value is required and returns the value of that key in the json object

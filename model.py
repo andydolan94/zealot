@@ -3,6 +3,7 @@ from utilities import clean
 
 from api_methods import summoner_v1_4
 from api_methods import current_game_v1_0
+from api_methods import dd_champion
 from models import data_dragon
 from models import summoner
 from data import region_data
@@ -60,7 +61,6 @@ class Model:
 
         # If the username is not valid...
         if not name_is_valid:
-
             # Update the status bar
             put_list = ["update status bar", reason, "red"]
             queue.put(put_list)
@@ -123,6 +123,10 @@ class Model:
             # Alert the user
             put_list = ["update status bar", "Game found!", "green"]
             queue.put(put_list)
+
+            # Attach champions to participants
+            dd_champion.get_champions_by_participants(self.participants, self.versions.champion_version,
+                                                      self.region.locales[0])
 
             # Open a new window and add the summoners to the window
             put_list = ["update current game", self.participants]

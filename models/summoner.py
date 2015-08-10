@@ -33,3 +33,6 @@ class InGameSummoner(Summoner):
         self.spell_2_id = None
         self.runes = None
         self.masteries = None
+
+        # Extra attributes
+        self.current_champion = None
