@@ -28,21 +28,25 @@ class View:
 
         """
         Creating the core frames
+            + LEFT PANE
             + BASE
             + STATUS BAR
         """
         # Create frames
+        self.frame_left_pane = Frame(self.master, width=200, bd=5, relief=RIDGE)
         self.frame_base = Frame(self.master)
         self.frame_status_bar = Frame(self.master, height=20, bg="light grey")
 
         # Pack frames
-        self.frame_base.pack()
         self.frame_status_bar.pack(side=BOTTOM, fill=X)
-
+        self.frame_left_pane.pack(side=LEFT, fill=Y)
+        self.frame_base.pack()
         # -------------------------------------------------------------------
 
         """
         Creating elements in the frames
+            + Menu Bar
+            - LEFT PANE
             - BASE
                 + Summoner Name Label
                 + Summoner Name Entry       (Entry - typed input)
@@ -56,6 +60,24 @@ class View:
             - STATUS BAR
                 + Status Bar Message
         """
+        # Menu Bar
+        self.menu_bar = Menu(self.master)
+
+        # Menu Bar - File
+        self.file_menu = Menu(self.menu_bar, tearoff=0)
+        self.file_menu.add_command(label="Exit", command=self.master.quit)
+        self.menu_bar.add_cascade(label="File", menu=self.file_menu)
+
+        # Menu Bar - Edit
+        self.edit_menu = Menu(self.menu_bar, tearoff=0)
+        self.edit_menu.add_command(label="Coming soon...")
+        self.menu_bar.add_cascade(label="Edit", menu=self.edit_menu)
+
+        # Menu Bar - View
+        self.view_menu = Menu(self.menu_bar, tearoff=0)
+        self.view_menu.add_command(label="Coming soon...")
+        self.menu_bar.add_cascade(label="View", menu=self.view_menu)
+
         # Create View Labels
         self.summoner_name_label = Label(self.frame_base, text="Summoner Name:")
         self.summoner_region_label = Label(self.frame_base, text="Region:")
@@ -96,6 +118,9 @@ class View:
         """
         Base Grid Layout and Status Bar Packing
         """
+        # Menu Bar (Top row)
+        self.master.config(menu=self.menu_bar)
+
         # Labels (left column)
         self.summoner_name_label.grid(row=0, column=1, sticky=E)
         self.summoner_region_label.grid(row=1, column=1, sticky=E)
